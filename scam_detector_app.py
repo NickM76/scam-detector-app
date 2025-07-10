@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pytesseract
 from PIL import Image
@@ -12,7 +11,11 @@ Upload screenshots van twee verschillende Telegram groepen (bijv. Coin A en Coin
 Deze tool vergelijkt welke gebruikers in beide screenshots voorkomen — een sterke indicator voor verdachte activiteit.
 """)
 
+# Regex voor geldige Telegram gebruikersnamen
 USERNAME_REGEX = re.compile(r"^@[a-zA-Z0-9_]{5,32}$")
+
+# Keywords om verdachte namen te markeren
+SUSPECT_KEYWORDS = ["airdrop", "pump", "scam", "bot", "admin", "mod", "giveaway"]
 
 def extract_usernames(image):
     try:
@@ -22,7 +25,7 @@ def extract_usernames(image):
         for line in lines:
             for word in line.split():
                 if USERNAME_REGEX.match(word):
-                    usernames.add(word[1:])
+                    usernames.add(word[1:])  # zonder '@'
         return usernames
     except Exception as e:
         st.error(f"Fout bij OCR: {e}")
@@ -41,11 +44,15 @@ if images_a and images_b:
     with st.spinner("🔍 OCR uitvoeren op Coin A afbeeldingen..."):
         for image_file in images_a:
             img = Image.open(image_file)
+            text = pytesseract.image_to_string(img)
+            st.expander(f"📝 OCR-output Coin A – {image_file.name}").write(text)
             usernames_a.update(extract_usernames(img))
 
     with st.spinner("🔍 OCR uitvoeren op Coin B afbeeldingen..."):
         for image_file in images_b:
             img = Image.open(image_file)
+            text = pytesseract.image_to_string(img)
+            st.expander(f"📝 OCR-output Coin B – {image_file.name}").write(text)
             usernames_b.update(extract_usernames(img))
 
     overlap = usernames_a.intersection(usernames_b)
@@ -59,7 +66,9 @@ if images_a and images_b:
     if overlap:
         st.warning("🚨 Mogelijk verdachte overlap gedetecteerd:")
         for user in sorted(overlap):
-            st.markdown(f"[🔗 @{user}](https://t.me/{user})", unsafe_allow_html=True)
+            is_suspect = any(keyword in user.lower() for keyword in SUSPECT_KEYWORDS)
+            icon = "🚩" if is_suspect else "🔗"
+            st.markdown(f"[{icon} @{user}](https://t.me/{user})", unsafe_allow_html=True)
 
         st.download_button(
             "📥 Download overlap als CSV",
@@ -72,10 +81,25 @@ if images_a and images_b:
 
     with st.expander("🅰️ Alle gebruikers in Coin A"):
         for user in sorted(usernames_a):
-            st.markdown(f"- @{user}")
+            st.markdown(f"- [`@{user}`](https://t.me/{user})")
 
     with st.expander("🅱️ Alle gebruikers in Coin B"):
         for user in sorted(usernames_b):
-            st.markdown(f"- @{user}")
+            st.markdown(f"- [`@{user}`](https://t.me/{user})")
+
+    st.download_button(
+        "📥 Download Coin A gebruikers",
+        data="\n".join([f"@{user}" for user in sorted(usernames_a)]),
+        file_name="coin_a_usernames.csv",
+        mime="text/csv"
+    )
+
+    st.download_button(
+        "📥 Download Coin B gebruikers",
+        data="\n".join([f"@{user}" for user in sorted(usernames_b)]),
+        file_name="coin_b_usernames.csv",
+        mime="text/csv"
+    )
+
 else:
     st.info("📎 Upload screenshots van beide coins om overlap te detecteren.")
