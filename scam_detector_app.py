@@ -4,7 +4,6 @@ from PIL import Image
 import re
 
 st.set_page_config(page_title="Telegram & Wallet Overlap Detector", layout="centered")
-st.markdown("🧪 TESTBUILD v2 - wallets ingeschakeld")
 
 st.title("🔍 Telegram & Wallet Overlap Detector")
 
