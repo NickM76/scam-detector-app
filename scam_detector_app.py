@@ -19,13 +19,14 @@ SUSPECT_KEYWORDS = ["airdrop", "pump", "scam", "bot", "admin", "mod", "giveaway"
 
 def extract_usernames(image):
     try:
-        text = pytesseract.image_to_string(image)
+        text = pytesseract.image_to_string(image, config='--psm 6')
         lines = [line.strip() for line in text.splitlines()]
         usernames = set()
         for line in lines:
-            for word in line.split():
-                if USERNAME_REGEX.match(word):
-                    usernames.add(word[1:])  # zonder '@'
+            if len(line) >= 3 and not line.lower().startswith(("laatst gezien", "gezien", "recent gezien")):
+                candidate = line.split(" – ")[0].strip()
+                if len(candidate.split()) <= 4:
+                    usernames.add(candidate)
         return usernames
     except Exception as e:
         st.error(f"Fout bij OCR: {e}")
