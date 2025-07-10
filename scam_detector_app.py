@@ -24,7 +24,7 @@ def extract_usernames(image):
         usernames = set()
         for line in lines:
             if len(line) >= 3 and not line.lower().startswith(("laatst gezien", "gezien", "recent gezien")):
-                candidate = line.split(" – ")[0].strip()
+                candidate = line.split(" • ")[0].strip()
                 if len(candidate.split()) <= 4:
                     usernames.add(candidate)
         return usernames
