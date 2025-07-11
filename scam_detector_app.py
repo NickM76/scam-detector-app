@@ -4,33 +4,32 @@ from PIL import Image
 import re
 import base64
 
-# ---------------------- PAGE CONFIG & LOGO ----------------------
+# ---------------------- PAGE CONFIG ----------------------
 st.set_page_config(page_title="XRPL Overlap Detector", layout="centered")
 
-# Load and encode logo for embedding
+# ---------------------- ENCODE LOGO ----------------------
 image_path = "XRPL overlap Detector logo.png"
 with open(image_path, "rb") as image_file:
     encoded_logo = base64.b64encode(image_file.read()).decode()
 
-# Inject custom CSS + display logo in center
+# ---------------------- CUSTOM CSS + LOGO ----------------------
 st.markdown(f"""
 <style>
-    .main {{
-        background-color: #f7f9fc;
-        padding: 2rem;
+    .stApp {{
+        background-color: #f8fafd;
         font-family: 'Segoe UI', sans-serif;
     }}
-    .stApp {{
-        background-color: #f7f9fc;
-    }}
+
     .block-container {{
         padding-top: 2rem;
+        padding-bottom: 2rem;
     }}
-    h1 {{
+
+    h1, h2, h3, h4, h5, h6, p {{
+        text-align: center !important;
         color: #2f4f75;
-        text-align: center;
-        font-weight: bold;
     }}
+
     .custom-logo {{
         display: block;
         margin-left: auto;
@@ -38,18 +37,33 @@ st.markdown(f"""
         width: 180px;
         margin-bottom: 1rem;
     }}
+
+    .element-container button {{
+        margin: 0 auto;
+        display: block;
+    }}
+
+    .element-container .stDownloadButton {{
+        text-align: center;
+    }}
+
+    .stMetric label {{
+        display: flex;
+        justify-content: center;
+    }}
 </style>
 <img class="custom-logo" src="data:image/png;base64,{encoded_logo}" />
 """, unsafe_allow_html=True)
 
+# ---------------------- HEADER ----------------------
 st.title("🔁 XRPL Overlap Detector")
 
 st.markdown("""
 Before investing in any XRPL-related project, it's important to stay alert.  
 Many scam groups use the same wallet addresses across multiple projects to orchestrate **pump & dump schemes**, create **fake hype**, or **drain liquidity**.
 
-🔎 This tool helps you uncover suspicious patterns by scanning **Telegram usernames** and **wallet fragments** (first 9 characters) from uploaded screenshots.  
-By comparing two different projects, you can detect overlaps and identify possible red flags — helping you avoid manipulation and make smarter investment decisions.
+🔎 This tool helps uncover suspicious patterns by scanning **Telegram usernames** and **wallet fragments** (first 9 characters) from uploaded screenshots.  
+Compare two different projects and detect overlaps — helping you avoid manipulation and make smarter investment decisions.
 """)
 
 # ---------------------- REGEX SETUP ----------------------
