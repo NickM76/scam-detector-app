@@ -14,7 +14,11 @@ st.image(logo, width=180)
 st.title("🔁 XRPL Overlap Detector")
 
 st.markdown("""
-Upload screenshots from XRPL-related projects from wallets or Telegram users. This tool scans for overlapping **Telegram usernames** and **wallet addresses** (first 9 characters) that may suggest pump & dump or scam behavior.
+Before investing in any XRPL-related project, it's important to stay alert.  
+Many scam groups use the same wallet addresses across multiple projects to orchestrate **pump & dump schemes**, create **fake hype**, or **drain liquidity**.
+
+🔎 This tool helps you a little uncover suspicious patterns by scanning **Telegram usernames** but more **wallet fragments** (first 9 characters) from uploaded screenshots.  
+By comparing two different projects, you can detect overlaps and identify possible red flags — helping you avoid manipulation and make smarter investment decisions.
 """)
 
 # ---------------------- REGEX SETUP ----------------------
