@@ -11,9 +11,6 @@ from yaml.loader import SafeLoader
 # ---------------------- CONFIG ----------------------
 st.set_page_config(page_title="XRPL Overlap Detector", layout="centered")
 
-# Optional: Tesseract pad (Windows users)
-# pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-
 # ---------------------- AUTH ----------------------
 try:
     with open("config.yaml") as file:
@@ -39,69 +36,62 @@ if authentication_status:
     except FileNotFoundError:
         encoded_logo = ""
 
-# ---------------------- LOGO + STYLING ----------------------
-try:
-    with open("XRPL overlap Detector logo.png", "rb") as image_file:
-        encoded_logo = base64.b64encode(image_file.read()).decode()
-except FileNotFoundError:
-    encoded_logo = ""
+    st.markdown(f"""
+        <style>
+            .stApp {{
+                background-color: #f7f9fc;
+            }}
 
-st.markdown(f"""
-    <style>
-        .stApp {{
-            background-color: #f7f9fc;
-        }}
+            .block-container {{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                max-width: 800px;
+                margin: 0 auto;
+                padding-top: 2rem;
+                font-family: 'Segoe UI', sans-serif;
+            }}
 
-        .block-container {{
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 800px;
-            margin: 0 auto;
-            padding-top: 2rem;
-            font-family: 'Segoe UI', sans-serif;
-        }}
+            h1 {{
+                color: #2f4f75;
+                text-align: center;
+                font-weight: bold;
+            }}
 
-        h1 {{
-            color: #2f4f75;
-            text-align: center;
-            font-weight: bold;
-        }}
+            .custom-logo {{
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 180px;
+                margin-bottom: 1rem;
+            }}
 
-        .custom-logo {{
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            width: 180px;
-            margin-bottom: 1rem;
-        }}
+            .stTextInput, .stFileUploader, .stTextArea, .stDownloadButton, .stButton {{
+                width: 100% !important;
+                max-width: 600px;
+            }}
 
-        .stTextInput, .stFileUploader, .stTextArea, .stDownloadButton, .stButton {{
-            width: 100% !important;
-            max-width: 600px;
-        }}
+            .stSubheader, .stMarkdown, .stExpander {{
+                width: 100% !important;
+                max-width: 800px;
+            }}
 
-        .stSubheader, .stMarkdown, .stExpander {{
-            width: 100% !important;
-            max-width: 800px;
-        }}
+            .stMetric {{
+                justify-content: center !important;
+            }}
+        </style>
 
-        .stMetric {{
-            justify-content: center !important;
-        }}
-    </style>
+        <img class="custom-logo" src="data:image/png;base64,{encoded_logo}" />
+    """, unsafe_allow_html=True)
 
-    <img class="custom-logo" src="data:image/png;base64,{encoded_logo}" />
-""", unsafe_allow_html=True)
+    st.title("🔁 XRPL Overlap Detector")
 
-st.title("🔁 XRPL Overlap Detector")
-)
-
+    st.markdown("""
     Stay alert when investing in XRPL projects.  
     This tool scans **Telegram usernames** and **wallet fragments** from screenshots to detect suspicious overlaps.
 
     ✅ Use it to reveal duplicate actors between projects.  
-    📎 Upload screenshots or paste wallet addresses manually.
+    📌 Upload screenshots or paste wallet addresses manually.
     """)
 
     # ---------------------- REGEX ----------------------
@@ -129,7 +119,7 @@ st.title("🔁 XRPL Overlap Detector")
         return usernames, wallets
 
     # ---------------------- INPUTS ----------------------
-    st.subheader("🅰️ Upload screenshots from Project A")
+    st.subheader("🆐️ Upload screenshots from Project A")
     images_a = st.file_uploader("Select image(s)", type=["jpg", "jpeg", "png"], accept_multiple_files=True, key="a")
 
     st.subheader("🅱️ Upload screenshots from Project B")
@@ -199,7 +189,7 @@ st.title("🔁 XRPL Overlap Detector")
         else:
             st.success("✅ No overlapping wallets found.")
 
-        with st.expander("🅰️ Usernames Project A"):
+        with st.expander("🆐️ Usernames Project A"):
             for u in sorted(usernames_a):
                 st.markdown(f"- [`@{u}`](https://t.me/{u})")
         with st.expander("🅱️ Usernames Project B"):
@@ -209,7 +199,7 @@ st.title("🔁 XRPL Overlap Detector")
         st.download_button("⬇️ Download A", "\n".join([f"@{u}" for u in sorted(usernames_a)]), "project_a_usernames.csv", "text/csv")
         st.download_button("⬇️ Download B", "\n".join([f"@{u}" for u in sorted(usernames_b)]), "project_b_usernames.csv", "text/csv")
     else:
-        st.info("📎 Upload screenshots from both projects or paste wallet addresses to compare.")
+        st.info("📌 Upload screenshots from both projects or paste wallet addresses to compare.")
 
     authenticator.logout("Logout", "sidebar")
 
