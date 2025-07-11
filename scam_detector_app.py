@@ -40,35 +40,58 @@ if authentication_status:
         encoded_logo = ""
 
     st.markdown(f"""
-    <style>
-        .main {{
-            background-color: #f7f9fc;
-            padding: 2rem;
-            font-family: 'Segoe UI', sans-serif;
-        }}
+    st.markdown(f"""
+<style>
+    .main {{
+        background-color: #f7f9fc;
+        padding: 2rem;
+        font-family: 'Segoe UI', sans-serif;
+    }}
 
-        .stApp {{
-            background-color: #f7f9fc;
-        }}
+    .stApp {{
+        background-color: #f7f9fc;
+    }}
 
-        .block-container {{
-            padding-top: 2rem;
-        }}
+    .block-container {{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 800px;
+        margin: 0 auto;
+    }}
 
-        h1 {{
-            color: #2f4f75;
-            text-align: center;
-            font-weight: bold;
-        }}
+    h1 {{
+        color: #2f4f75;
+        text-align: center;
+        font-weight: bold;
+    }}
 
-        .custom-logo {{
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            width: 180px;
-            margin-bottom: 1rem;
-        }}
-    </style>
+    .custom-logo {{
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 180px;
+        margin-bottom: 1rem;
+    }}
+
+    .stTextInput, .stFileUploader, .stTextArea, .stDownloadButton, .stButton {{
+        width: 100% !important;
+        max-width: 600px;
+    }}
+
+    .stSubheader, .stMarkdown, .stExpander {{
+        width: 100% !important;
+        max-width: 800px;
+    }}
+
+    .stMetric {{
+        justify-content: center !important;
+    }}
+</style>
+
+<img class="custom-logo" src="data:image/png;base64,{encoded_logo}" />
+""", unsafe_allow_html=True)
+
 
     <img class="custom-logo" src="data:image/png;base64,{encoded_logo}" />
     """, unsafe_allow_html=True)
