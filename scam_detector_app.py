@@ -20,7 +20,7 @@ Upload screenshots from XRPL-related projects from wallets or Telegram users. Th
 # ---------------------- REGEX SETUP ----------------------
 USERNAME_REGEX = re.compile(r"^@?[a-zA-Z0-9_]{5,32}$")
 WALLET_REGEX = re.compile(r"r[a-zA-Z0-9]{8}")
-SUSPECT_KEYWORDS = ["airdrop", "pump", "scam", "bot", "admin", "mod", "giveaway"]
+SUSPECT_KEYWORDS = ["shill", "shibo", "winners", "winner"]
 
 # ---------------------- DATA EXTRACTION ----------------------
 def extract_data(image):
