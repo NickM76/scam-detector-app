@@ -1,11 +1,11 @@
 credentials:
   usernames:
-    nickm76:
-      email: nick@example.com
-      name: Nick M
-      password: 'hashed_password_here'  # gebruik bij voorkeur een gehashte wachtwoordversie
+    demo_user:
+      name: Demo User
+      email: demo@xrplover.com
+      password: '$2b$12$5kgMWEFGKTrRlsqGpSn70eJwL4ijy7tPDAuHVLrHcNyaFybZK1Tvy'
 
 cookie:
-  name: xrpl_auth_cookie
-  key: some_random_key
-  expiry_days: 30
+  name: xrpl_overlap_auth
+  key: secretkey123
+  expiry_days: 7
