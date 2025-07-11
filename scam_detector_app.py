@@ -3,31 +3,36 @@ import pytesseract
 from PIL import Image
 import re
 import base64
+import requests
 
-# ---------------------- PAGE CONFIG ----------------------
-st.set_page_config(page_title="XRPL Overlap Detector", layout="centered")
-
-# ---------------------- ENCODE LOGO ----------------------
+# ---------------------- PAGE CONFIG & LOGO ----------------------
 image_path = "XRPL overlap Detector logo.png"
 with open(image_path, "rb") as image_file:
     encoded_logo = base64.b64encode(image_file.read()).decode()
 
-# ---------------------- CUSTOM CSS + LOGO ----------------------
+st.set_page_config(page_title="XRPL Overlap Detector", layout="centered")
+
+# Inject custom CSS + logo
 st.markdown(f"""
 <style>
-    .stApp {{
-        background-color: #f8fafd;
+    .main {{
+        background-color: #f7f9fc;
+        padding: 2rem;
         font-family: 'Segoe UI', sans-serif;
+    }}
+
+    .stApp {{
+        background-color: #f7f9fc;
     }}
 
     .block-container {{
         padding-top: 2rem;
-        padding-bottom: 2rem;
     }}
 
-    h1, h2, h3, h4, h5, h6, p {{
-        text-align: center !important;
+    h1 {{
         color: #2f4f75;
+        text-align: center;
+        font-weight: bold;
     }}
 
     .custom-logo {{
@@ -37,38 +42,25 @@ st.markdown(f"""
         width: 180px;
         margin-bottom: 1rem;
     }}
-
-    .element-container button {{
-        margin: 0 auto;
-        display: block;
-    }}
-
-    .element-container .stDownloadButton {{
-        text-align: center;
-    }}
-
-    .stMetric label {{
-        display: flex;
-        justify-content: center;
-    }}
 </style>
+
 <img class="custom-logo" src="data:image/png;base64,{encoded_logo}" />
 """, unsafe_allow_html=True)
 
-# ---------------------- HEADER ----------------------
 st.title("🔁 XRPL Overlap Detector")
 
 st.markdown("""
 Before investing in any XRPL-related project, it's important to stay alert.  
 Many scam groups use the same wallet addresses across multiple projects to orchestrate **pump & dump schemes**, create **fake hype**, or **drain liquidity**.
 
-🔎 This tool helps uncover suspicious patterns by scanning **Telegram usernames** and **wallet fragments** (first 9 characters) from uploaded screenshots.  
-Compare two different projects and detect overlaps — helping you avoid manipulation and make smarter investment decisions.
+🔎 This tool helps you uncover suspicious patterns by scanning **Telegram usernames** and **wallet fragments** (first 9 characters) from uploaded screenshots.  
+Additionally, you can enter **full wallet addresses manually** to check overlaps and view profiles.
 """)
 
 # ---------------------- REGEX SETUP ----------------------
 USERNAME_REGEX = re.compile(r"^@?[a-zA-Z0-9_]{5,32}$")
 WALLET_REGEX = re.compile(r"r[a-zA-Z0-9]{8}")
+FULL_WALLET_REGEX = re.compile(r"r[1-9A-HJ-NP-Za-km-z]{24,34}")
 SUSPECT_KEYWORDS = ["shill", "shibo", "winners", "winner"]
 
 # ---------------------- DATA EXTRACTION ----------------------
@@ -92,28 +84,36 @@ images_a = st.file_uploader("Select one or more images", type=["jpg", "jpeg", "p
 st.subheader("🅱️ Upload screenshots from Project B")
 images_b = st.file_uploader("Select one or more images", type=["jpg", "jpeg", "png"], accept_multiple_files=True, key="b")
 
+st.subheader("✍️ Optional: Paste full wallet addresses")
+wallets_manual_input = st.text_area("Paste one wallet address per line", placeholder="rXYZ...\nrABC...", height=150)
+manual_wallets = set(line.strip() for line in wallets_manual_input.splitlines() if FULL_WALLET_REGEX.match(line.strip()))
+
 # ---------------------- PROCESSING ----------------------
-if images_a and images_b:
+if images_a and images_b or manual_wallets:
     usernames_a, usernames_b = set(), set()
     wallets_a, wallets_b = set(), set()
 
-    with st.spinner("🔍 Scanning Project A..."):
-        for img_file in images_a:
-            img = Image.open(img_file)
-            st.expander(f"📝 OCR output A – {img_file.name}").write(pytesseract.image_to_string(img))
-            u, w = extract_data(img)
-            usernames_a.update(u)
-            wallets_a.update(w)
+    if images_a:
+        with st.spinner("🔍 Scanning Project A..."):
+            for img_file in images_a:
+                img = Image.open(img_file)
+                st.expander(f"📝 OCR output A – {img_file.name}").write(pytesseract.image_to_string(img))
+                u, w = extract_data(img)
+                usernames_a.update(u)
+                wallets_a.update(w)
 
-    with st.spinner("🔍 Scanning Project B..."):
-        for img_file in images_b:
-            img = Image.open(img_file)
-            st.expander(f"📝 OCR output B – {img_file.name}").write(pytesseract.image_to_string(img))
-            u, w = extract_data(img)
-            usernames_b.update(u)
-            wallets_b.update(w)
+    if images_b:
+        with st.spinner("🔍 Scanning Project B..."):
+            for img_file in images_b:
+                img = Image.open(img_file)
+                st.expander(f"📝 OCR output B – {img_file.name}").write(pytesseract.image_to_string(img))
+                u, w = extract_data(img)
+                usernames_b.update(u)
+                wallets_b.update(w)
 
-    # ---------------------- RESULTS ----------------------
+    # Combine with manual entries
+    wallets_b.update(manual_wallets)
+
     overlap_users = usernames_a.intersection(usernames_b)
     overlap_wallets = wallets_a.intersection(wallets_b)
 
@@ -137,12 +137,14 @@ if images_a and images_b:
     if overlap_wallets:
         st.warning("💰 Wallet overlap detected:")
         for w in sorted(overlap_wallets):
-            st.markdown(f"- `{w}`")
+            if len(w) >= 25:
+                st.markdown(f"- [`{w}`](https://xrpscan.com/account/{w})")
+            else:
+                st.markdown(f"- `{w}` (partial match, cannot query XRPScan)")
         st.download_button("📥 Download wallets (CSV)", "\n".join(sorted(overlap_wallets)), "overlap_wallets.csv", "text/csv")
     else:
         st.success("✅ No overlapping wallets detected.")
 
-    # ---------------------- FULL EXPORTS ----------------------
     with st.expander("🅰️ All usernames in Project A"):
         for u in sorted(usernames_a):
             st.markdown(f"- [`@{u}`](https://t.me/{u})")
@@ -153,6 +155,5 @@ if images_a and images_b:
 
     st.download_button("⬇️ Download all usernames A", "\n".join([f"@{u}" for u in sorted(usernames_a)]), "project_a_usernames.csv", "text/csv")
     st.download_button("⬇️ Download all usernames B", "\n".join([f"@{u}" for u in sorted(usernames_b)]), "project_b_usernames.csv", "text/csv")
-
 else:
-    st.info("📎 Upload screenshots from both projects to start comparison.")
+    st.info("📎 Upload screenshots from both projects or add wallet addresses to start comparison.")
