@@ -29,18 +29,15 @@ authenticator = stauth.Authenticate(
     config['cookie']['expiry_days']
 )
 
-authenticator.login(location='main', form_name='Login')
+name, authentication_status, username = authenticator.login(location='main', form_name='Login')
 
-if authenticator.authentication_status:
-    name = authenticator.name
-    username = authenticator.username
-
+if authentication_status:
     # ---------------------- LOGO + STYLING ----------------------
     try:
         with open("XRPL overlap Detector logo.png", "rb") as image_file:
             encoded_logo = base64.b64encode(image_file.read()).decode()
     except FileNotFoundError:
-        encoded_logo = ""  # fallback zonder logo
+        encoded_logo = ""
 
     st.markdown(f"""
     <style>
@@ -96,7 +93,7 @@ if authenticator.authentication_status:
     def extract_data(image):
         try:
             text = pytesseract.image_to_string(image, config='--psm 6')
-        except Exception as e:
+        except Exception:
             return set(), set()
 
         lines = [line.strip() for line in text.splitlines() if line.strip()]
@@ -195,7 +192,10 @@ if authenticator.authentication_status:
 
     authenticator.logout("Logout", "sidebar")
 
-elif authenticator.authentication_status is False:
+elif authentication_status is False:
     st.error("❌ Incorrect username or password.")
-elif authenticator.authentication_status is None:
+    st.stop()
+
+elif authentication_status is None:
     st.warning("🔐 Please log in to access the XRPL Overlap Detector.")
+    st.stop()
