@@ -1,11 +1,9 @@
 credentials:
   usernames:
-    admin:
-      name: Admin User
-      email: admin@xrpltools.io
-      password: '$2b$12$5kgMWEFGKTrRlsqGpSn70eJwL4ijy7tPDAuHVLrHcNyaFybZK1Tvy'
-
+    nick:
+      name: Nick
+      password: xrpl2015
 cookie:
-  name: xrpl_overlap_cookie
-  key: xrpl_supersecret_key
-  expiry_days: 14
+  name: my_cookie
+  key: some_random_key
+  expiry_days: 30
