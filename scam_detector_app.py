@@ -2,16 +2,17 @@ import streamlit as st
 import pytesseract
 from PIL import Image
 import re
-
-# ---------------------- PAGE CONFIG & LOGO ----------------------
 import base64
 
-# Load and encode logo
+# ---------------------- PAGE CONFIG & LOGO ----------------------
+st.set_page_config(page_title="XRPL Overlap Detector", layout="centered")
+
+# Load and encode logo for embedding
 image_path = "XRPL overlap Detector logo.png"
 with open(image_path, "rb") as image_file:
     encoded_logo = base64.b64encode(image_file.read()).decode()
 
-# Inject custom CSS + logo
+# Inject custom CSS + display logo in center
 st.markdown(f"""
 <style>
     .main {{
@@ -19,21 +20,17 @@ st.markdown(f"""
         padding: 2rem;
         font-family: 'Segoe UI', sans-serif;
     }}
-
     .stApp {{
         background-color: #f7f9fc;
     }}
-
     .block-container {{
         padding-top: 2rem;
     }}
-
     h1 {{
         color: #2f4f75;
         text-align: center;
         font-weight: bold;
     }}
-
     .custom-logo {{
         display: block;
         margin-left: auto;
@@ -42,15 +39,8 @@ st.markdown(f"""
         margin-bottom: 1rem;
     }}
 </style>
-
 <img class="custom-logo" src="data:image/png;base64,{encoded_logo}" />
 """, unsafe_allow_html=True)
-
-st.set_page_config(page_title="XRPL Overlap Detector", layout="centered")
-
-# Load and display logo
-logo = Image.open("XRPL overlap Detector logo.png")
-st.image(logo, width=180)
 
 st.title("🔁 XRPL Overlap Detector")
 
@@ -58,7 +48,7 @@ st.markdown("""
 Before investing in any XRPL-related project, it's important to stay alert.  
 Many scam groups use the same wallet addresses across multiple projects to orchestrate **pump & dump schemes**, create **fake hype**, or **drain liquidity**.
 
-🔎 This tool helps you a little uncover suspicious patterns by scanning **Telegram usernames** but more **wallet fragments** (first 9 characters) from uploaded screenshots.  
+🔎 This tool helps you uncover suspicious patterns by scanning **Telegram usernames** and **wallet fragments** (first 9 characters) from uploaded screenshots.  
 By comparing two different projects, you can detect overlaps and identify possible red flags — helping you avoid manipulation and make smarter investment decisions.
 """)
 
