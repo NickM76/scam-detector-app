@@ -4,6 +4,47 @@ from PIL import Image
 import re
 
 # ---------------------- PAGE CONFIG & LOGO ----------------------
+import base64
+
+# Load and encode logo
+image_path = "XRPL overlap Detector logo.png"
+with open(image_path, "rb") as image_file:
+    encoded_logo = base64.b64encode(image_file.read()).decode()
+
+# Inject custom CSS + logo
+st.markdown(f"""
+<style>
+    .main {{
+        background-color: #f7f9fc;
+        padding: 2rem;
+        font-family: 'Segoe UI', sans-serif;
+    }}
+
+    .stApp {{
+        background-color: #f7f9fc;
+    }}
+
+    .block-container {{
+        padding-top: 2rem;
+    }}
+
+    h1 {{
+        color: #2f4f75;
+        text-align: center;
+        font-weight: bold;
+    }}
+
+    .custom-logo {{
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 180px;
+        margin-bottom: 1rem;
+    }}
+</style>
+
+<img class="custom-logo" src="data:image/png;base64,{encoded_logo}" />
+""", unsafe_allow_html=True)
 
 st.set_page_config(page_title="XRPL Overlap Detector", layout="centered")
 
