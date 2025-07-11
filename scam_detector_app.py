@@ -40,7 +40,6 @@ if authentication_status:
         encoded_logo = ""
 
     st.markdown(f"""
-    st.markdown(f"""
 <style>
     .main {{
         background-color: #f7f9fc;
@@ -92,13 +91,6 @@ if authentication_status:
 <img class="custom-logo" src="data:image/png;base64,{encoded_logo}" />
 """, unsafe_allow_html=True)
 
-
-    <img class="custom-logo" src="data:image/png;base64,{encoded_logo}" />
-    """, unsafe_allow_html=True)
-
-    st.title("🔁 XRPL Overlap Detector")
-
-    st.markdown("""
     Stay alert when investing in XRPL projects.  
     This tool scans **Telegram usernames** and **wallet fragments** from screenshots to detect suspicious overlaps.
 
