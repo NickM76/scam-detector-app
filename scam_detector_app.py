@@ -4,6 +4,8 @@ from PIL import Image
 import re
 
 # ---------------------- PAGE CONFIG & LOGO ----------------------
+st.success("✅ Latest version loaded — logo & title should update!")
+
 st.set_page_config(page_title="XRPL Overlap Detector", layout="centered")
 
 # Load and display logo
