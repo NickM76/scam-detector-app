@@ -1,10 +1,13 @@
 credentials:
   usernames:
-    demo:
-      name: Demo User
-      password: '$2b$12$Vg3EcV.9tNxy91mbkzXaXeO8MmwEjZ1DLziFa2z/v7gKvhRWWk5gK'  # wachtwoord = demo123
+    Nick:
+      name: Nick
+      password: '$2b$12$5.HhVjEfMdJmUkDYuMnVVOFnlVV4pOD9W7B64BO7S4mUXxXvBtwqu'
 
 cookie:
-  name: xrpl_auth
-  key: supersecretkey
+  name: xrpl_overlap_auth
+  key: some_random_secret_key_12345
   expiry_days: 30
+
+preauthorized:
+  emails: []
