@@ -1,3 +1,6 @@
 streamlit
 pytesseract
 Pillow
+pyyaml
+requests
+streamlit-authenticator
