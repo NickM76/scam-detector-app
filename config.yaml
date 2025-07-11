@@ -1,10 +1,10 @@
 credentials:
   usernames:
-    nickm76:
-      email: nick@example.com
-      name: Nick M
-      password: '$2b$12$eW5u2LjY0GpQx4zGRm9Z4egSz7EjYIuN6Jvd3wGG5T6JhTRqRA9fG'
+    demo:
+      name: Demo User
+      password: '$2b$12$Vg3EcV.9tNxy91mbkzXaXeO8MmwEjZ1DLziFa2z/v7gKvhRWWk5gK'  # wachtwoord = demo123
+
 cookie:
-  name: my_cookie
-  key: some_random_key
+  name: xrpl_auth
+  key: supersecretkey
   expiry_days: 30
