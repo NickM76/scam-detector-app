@@ -1,4 +1,4 @@
-import streamlit_authenticator as stauth
+from streamlit_authenticator.utilities.hasher import Hasher
 
-hashed = stauth.Hasher(['MijnSuperGeheimWachtwoord2025!']).generate()
-print(hashed[0])
+hashed_password = Hasher().generate_password('MijnSterkWachtwoord123')
+print(hashed_password)
