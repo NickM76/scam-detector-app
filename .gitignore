@@ -1,0 +1,6 @@
+# Secrets
+config.yaml
+
+# Python cache
+*.pyc
+__pycache__/
