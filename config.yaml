@@ -1,8 +1,9 @@
 credentials:
   usernames:
-    nick:
-      name: Nick
-      password: xrpl2015
+    nickm76:
+      email: nick@example.com
+      name: Nick M
+      password: '$2b$12$eW5u2LjY0GpQx4zGRm9Z4egSz7EjYIuN6Jvd3wGG5T6JhTRqRA9fG'
 cookie:
   name: my_cookie
   key: some_random_key
