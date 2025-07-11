@@ -18,13 +18,15 @@ authenticator = stauth.Authenticate(
     config['cookie']['expiry_days']
 )
 
-login_result = authenticator.login(location='main', form_name='Login')
+name, authentication_status, username = authenticator.login(location='main', form_name='Login')
 
-if login_result is not None:
-    name, authentication_status, username = login_result
-else:
-    st.error("\U0001F6AB Authentication error. Please check your config.yaml and try again.")
+if authentication_status is False:
+    st.error("❌ Gebruikersnaam of wachtwoord is incorrect.")
     st.stop()
+elif authentication_status is None:
+    st.warning("🔐 Vul je inloggegevens in om toegang te krijgen.")
+    st.stop()
+
 
 if authentication_status:
 
