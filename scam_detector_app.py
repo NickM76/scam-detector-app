@@ -43,9 +43,6 @@ if authentication_status:
             }}
 
             .block-container {{
-                display: flex;
-                flex-direction: column;
-                align-items: center;
                 max-width: 800px;
                 margin: 0 auto;
                 padding-top: 2rem;
@@ -69,11 +66,14 @@ if authentication_status:
             .stTextInput, .stFileUploader, .stTextArea, .stDownloadButton, .stButton {{
                 width: 100% !important;
                 max-width: 600px;
+                margin: 0 auto;
             }}
 
             .stSubheader, .stMarkdown, .stExpander {{
                 width: 100% !important;
                 max-width: 800px;
+                margin-left: auto;
+                margin-right: auto;
             }}
 
             .stMetric {{
@@ -91,7 +91,7 @@ if authentication_status:
     This tool scans **Telegram usernames** and **wallet fragments** from screenshots to detect suspicious overlaps.
 
     ✅ Use it to reveal duplicate actors between projects.  
-    📌 Upload screenshots or paste wallet addresses manually.
+    📎 Upload screenshots or paste wallet addresses manually.
     """)
 
     # ---------------------- REGEX ----------------------
@@ -119,7 +119,7 @@ if authentication_status:
         return usernames, wallets
 
     # ---------------------- INPUTS ----------------------
-    st.subheader("🆐️ Upload screenshots from Project A")
+    st.subheader("🅰️ Upload screenshots from Project A")
     images_a = st.file_uploader("Select image(s)", type=["jpg", "jpeg", "png"], accept_multiple_files=True, key="a")
 
     st.subheader("🅱️ Upload screenshots from Project B")
@@ -189,7 +189,7 @@ if authentication_status:
         else:
             st.success("✅ No overlapping wallets found.")
 
-        with st.expander("🆐️ Usernames Project A"):
+        with st.expander("🅰️ Usernames Project A"):
             for u in sorted(usernames_a):
                 st.markdown(f"- [`@{u}`](https://t.me/{u})")
         with st.expander("🅱️ Usernames Project B"):
@@ -199,7 +199,7 @@ if authentication_status:
         st.download_button("⬇️ Download A", "\n".join([f"@{u}" for u in sorted(usernames_a)]), "project_a_usernames.csv", "text/csv")
         st.download_button("⬇️ Download B", "\n".join([f"@{u}" for u in sorted(usernames_b)]), "project_b_usernames.csv", "text/csv")
     else:
-        st.info("📌 Upload screenshots from both projects or paste wallet addresses to compare.")
+        st.info("📎 Upload screenshots from both projects or paste wallet addresses to compare.")
 
     authenticator.logout("Logout", "sidebar")
 
